@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1264e8">
+<title>MANAVAR | بازار خرید و فروش</title>
+<style>
+:root{--blue:#1264e8;--ink:#172033;--muted:#697386;--line:#e7ebf2;--bg:#f5f7fb}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.wrap{max-width:1080px;margin:auto;padding:16px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:25px;font-weight:900;color:var(--blue);letter-spacing:1px}
+button{border:0;border-radius:12px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer}
+.primary{background:var(--blue);color:white}.secondary{background:#eef4ff;color:var(--blue)}
+.hero{background:linear-gradient(130deg,#0b3d91,#1976f3);color:white;padding:34px 20px;border-radius:22px;margin:22px 0}
+.hero h1{margin:0 0 10px;font-size:28px}.hero p{margin:0 0 20px;color:#e4efff}
+.search{display:flex;gap:8px;background:white;padding:7px;border-radius:14px}.search input{flex:1;min-width:0;border:0;outline:0;padding:10px;font:inherit;color:var(--ink)}
+h2{font-size:20px;margin:28px 0 14px}.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cat{background:#fff;border:1px solid var(--line);padding:16px 8px;border-radius:14px;text-align:center;font-weight:700;cursor:pointer}
+.cat span{display:block;font-size:25px;margin-bottom:6px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.pic{height:130px;display:grid;place-items:center;background:#edf3ff;font-size:48px}
+.info{padding:13px}.info h3{font-size:15px;margin:0 0 9px}.price{font-weight:900;color:var(--blue)}.city{font-size:12px;color:var(--muted);margin-top:7px}
+.empty{background:#fff;border:1px dashed #cbd5e1;padding:25px;text-align:center;border-radius:14px;color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:30px}
+.modal{display:none;position:fixed;inset:0;background:#0b122acc;z-index:10;padding:18px;align-items:center;justify-content:center}
+.modal.open{display:flex}.panel{background:white;border-radius:18px;padding:20px;width:min(100%,440px);max-height:90vh;overflow:auto}
+.panel input,.panel select{width:100%;padding:12px;margin:7px 0 13px;border:1px solid var(--line);border-radius:10px;font:inherit}
+.panel label{font-size:13px;font-weight:700}
+@media(max-width:650px){.grid{grid-template-columns:repeat(2,1fr)}.cats{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:23px}.top .secondary{display:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap top"><div class="logo">MANAVAR</div><button class="primary" onclick="openForm()">＋ ثبت آگهی</button></div></header>
+<main class="wrap">
+<section class="hero"><h1>هر چیزی که می‌خوای، اینجاست!</h1><p>خرید و فروش آسان، سریع و مطمئن در ماناور</p>
+<div class="search"><input id="q" placeholder="مثلاً آیفون، پلی‌استیشن، دوچرخه..." oninput="render()"><button class="primary" onclick="render()">جست‌وجو</button></div></section>
+<h2>دسته‌بندی‌ها</h2>
+<div class="cats">
+<div class="cat" onclick="choose('موبایل')"><span>📱</span>موبایل</div>
+<div class="cat" onclick="choose('کنسول و بازی')"><span>🎮</span>کنسول و بازی</div>
+<div class="cat" onclick="choose('خانه')"><span>🛋️</span>خانه</div>
+<div class="cat" onclick="choose('ورزشی')"><span>⚽</span>ورزشی</div>
+</div>
+<div class="top"><h2>آگهی‌های تازه</h2><button class="secondary" onclick="choose('')">همه آگهی‌ها</button></div>
+<div id="listings" class="grid"></div>
+<footer>MANAVAR · بازار آنلاین خرید و فروش<br>این نسخه نمایشی است؛ آگهی‌ها فقط در همین صفحه آزمایشی نمایش داده می‌شوند.</footer>
+</main>
+<div class="modal" id="modal"><div class="panel">
+<div class="top"><h2 style="margin:0 0 12px">ثبت آگهی آزمایشی</h2><button class="secondary" onclick="closeForm()">✕</button></div>
+<label>عنوان آگهی</label><input id="title" placeholder="مثلاً گوشی موبایل">
+<label>قیمت (تومان)</label><input id="price" type="number" placeholder="مثلاً 12000000">
+<label>دسته‌بندی</label><select id="category"><option>موبایل</option><option>کنسول و بازی</option><option>خانه</option><option>ورزشی</option><option>سایر</option></select>
+<label>شهر</label><input id="city" placeholder="مثلاً تهران">
+<button class="primary" style="width:100%" onclick="addListing()">نمایش آگهی در صفحه</button>
+<p style="font-size:12px;color:#697386">برای انتشار واقعی آگهی‌ها، حساب کاربری و پایگاه داده لازم است.</p>
+</div></div>
+<script>
+const data=[
+{title:"گوشی هوشمند تمیز",price:"۱۸٬۵۰۰٬۰۰۰",cat:"موبایل",city:"تهران",icon:"📱"},
+{title:"دسته بازی PS5",price:"۲٬۸۰۰٬۰۰۰",cat:"کنسول و بازی",city:"کرج",icon:"🎮"},
+{title:"دوچرخه شهری",price:"۴٬۲۰۰٬۰۰۰",cat:"ورزشی",city:"تهران",icon:"🚲"},
+{title:"صندلی راحتی",price:"۳٬۰۰۰٬۰۰۰",cat:"خانه",city:"اصفهان",icon:"🪑"},
+{title:"بازی کنسول",price:"۱٬۲۰۰٬۰۰۰",cat:"کنسول و بازی",city:"شیراز",icon:"🕹️"},
+{title:"توپ فوتبال",price:"۶۵۰٬۰۰۰",cat:"ورزشی",city:"تبریز",icon:"⚽"}
+];let active="";
+function render(){let q=document.getElementById('q').value.trim();let items=data.filter(x=>(!active||x.cat===active)&&(!q||(x.title+x.cat+x.city).includes(q)));document.getElementById('listings').innerHTML=items.length?items.map(x=>`<article class="card"><div class="pic">${x.icon}</div><div class="info"><h3>${x.title}</h3><div class="price">${x.price} تومان</div><div class="city">${x.city} · ${x.cat}</div></div></article>`).join(''):'<div class="empty" style="grid-column:1/-1">آگهی‌ای پیدا نشد.</div>'}
+function choose(c){active=c;render();document.querySelector('.top h2').textContent=c?'آگهی‌های '+c:'آگهی‌های تازه'}
+function openForm(){document.getElementById('modal').classList.add('open')}
+function closeForm(){document.getElementById('modal').classList.remove('open')}
+function addListing(){let title=document.getElementById('title').value.trim(),price=document.getElementById('price').value,cat=document.getElementById('category').value,city=document.getElementById('city').value.trim()||'نامشخص';if(!title||!price){alert('عنوان و قیمت را وارد کن.');return}let icons={'موبایل':'📱','کنسول و بازی':'🎮','خانه':'🛋️','ورزشی':'⚽','سایر':'📦'};data.unshift({title,price:Number(price).toLocaleString('fa-IR'),cat,city,icon:icons[cat]});active='';document.getElementById('q').value='';render();closeForm();document.getElementById('title').value='';document.getElementById('price').value='';document.getElementById('city').value=''}
+render();
+</script>
+</body></html>
